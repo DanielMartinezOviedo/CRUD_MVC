@@ -1,0 +1,36 @@
+﻿@model List<CRUD_MVC_.Models.ViewModels.ListRecordsViewModels>
+@{
+    ViewBag.Tittle = "Index";
+}
+
+<h2>@ViewBag.Tittle</h2>
+
+<div class="row" style="text-align:right;padding:5px">
+    <a href="~/Records/New" class="btn btn-primary">Nuevo</a>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            @foreach(var oElement in Model)
+            {
+                <tr>
+                    <td>@oElement.Id</td>
+                    <td>@oElement.Name</td>
+                    <td>@oElement.LastName</td>
+                    <td>@oElement.Email</td>
+                    <td>
+                        <a href="~/Records/Update/@oElement.Id" class="btn btn-default">Editar</a>
+                        <a href="~/Records/Delete/@oElement.Id" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

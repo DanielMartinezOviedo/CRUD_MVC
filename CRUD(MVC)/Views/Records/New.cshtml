@@ -1,0 +1,37 @@
+﻿@model CRUD_MVC_.Models.ViewModels.RecordsViewModel
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("New", "Records", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        @Html.LabelFor(d => d.Name)
+                        @Html.ValidationMessageFor(d => d.Name, null, new { @class = "required" })
+                        @Html.TextBoxFor(d => d.Name, "", new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.LabelFor(d => d.LastName)
+                        @Html.ValidationMessageFor(d => d.LastName, null, new { @class = "required" })
+                        @Html.TextBoxFor(d => d.LastName, "", new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.LabelFor(d => d.Email)
+                        @Html.ValidationMessageFor(d => d.Email, null, new { @class = "required" })
+                        @Html.TextBoxFor(d => d.Email, "", new { @class = "form-control" })
+                    </div>
+                    <div>
+                        @Html.LabelFor(d => d.DateOfBirth)
+                        @Html.ValidationMessageFor(d => d.DateOfBirth, null, new { @class = "required" })
+                        @Html.EditorFor(d => d.DateOfBirth, "", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div style="text-align:right">
+                    <input value="Guardar" class="btn btn-primary" type="submit" />
+                </div>
+            </div>
+            }
