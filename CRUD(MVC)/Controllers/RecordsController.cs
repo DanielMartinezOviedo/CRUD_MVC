@@ -28,8 +28,8 @@ namespace CRUD_MVC_.Controllers
 
 				if (!string.IsNullOrEmpty(Request.QueryString["search"]))
 				{
-					string search = Request.QueryString["search"];
-					records = records.Where(r => r.Name.Contains(search) || r.LastName.Contains(search));
+					string searching = Request.QueryString["search"];
+					records = records.Where(r => r.Name.Contains(searching) || r.LastName.Contains(searching));
 				}
 
 				list = records.ToList();
