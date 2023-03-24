@@ -1,6 +1,8 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,13 +16,28 @@ namespace CRUD_MVC_.Controllers
 		// GET: Records
 		public ActionResult Index(string search)
 		{
+			/*List<ListRecordsViewModels> list;
+			using (mydbEntities db = new mydbEntities())
+			{
+				if (!string.IsNullOrEmpty(search))
+				{
+					list = db.Database.SqlQuery<ListRecordsViewModels>("EXEC sp_SearchRecords @Name", new SqlParameter("@Name", search)).ToList();
+				}
+				else
+				{
+					list = db.Database.SqlQuery<ListRecordsViewModels>(
+						"EXEC sp_GetRecords"
+					).ToList();
+				}
+			}
+			return View(list);*/
 			List<ListRecordsViewModels> list;
 			using (mydbEntities db = new mydbEntities())
 			{
 				var records = from d in db.Records
 							  select new ListRecordsViewModels
 							  {
-								  Id = d.Personid,
+								  Id = d.Personid.ToString(),
 								  Name = d.FirstName,
 								  LastName = d.LastName,
 								  Email = d.Email,
@@ -40,7 +57,6 @@ namespace CRUD_MVC_.Controllers
 			return View(list);
 		}
 
-
 		public ActionResult New()
 		{
 			return View();
@@ -55,14 +71,13 @@ namespace CRUD_MVC_.Controllers
 				{
 					using (mydbEntities db = new mydbEntities())
 					{
-						var oElement = new Records();
-						oElement.FirstName = model.Name;
-						oElement.LastName = model.LastName;
-						oElement.Email = model.Email;
-						oElement.Date_of_birth = model.DateOfBirth;
+						var firstNameParam = new SqlParameter("@firstName", model.Name);
+						var lastNameParam = new SqlParameter("@lastName", model.LastName);
+						var emailParam = new SqlParameter("@email", model.Email);
+						var dateOfBirthParam = new SqlParameter("@dateOfBirth", model.DateOfBirth);
 
-						db.Records.Add(oElement);
-						db.SaveChanges();
+						db.Database.ExecuteSqlCommand("exec sp_InsertRecord @firstName, @lastName, @email, @dateOfBirth",
+							firstNameParam, lastNameParam, emailParam, dateOfBirthParam);
 					}
 					return RedirectToAction("Index");
 				}
@@ -99,19 +114,18 @@ namespace CRUD_MVC_.Controllers
 				{
 					using (mydbEntities db = new mydbEntities())
 					{
-						var oRecord = db.Records.Find(model.Id);
-						oRecord.FirstName = model.Name;
-						oRecord.LastName = model.LastName;
-						oRecord.Email = model.Email;
-						oRecord.Date_of_birth = model.DateOfBirth;
+						var idParam = new SqlParameter("@id", model.Id);
+						var firstNameParam = new SqlParameter("@firstName", model.Name);
+						var lastNameParam = new SqlParameter("@lastName", model.LastName);
+						var emailParam = new SqlParameter("@email", model.Email);
+						var dateOfBirthParam = new SqlParameter("@dateOfBirth", model.DateOfBirth);
 
-						db.Entry(oRecord).State = System.Data.Entity.EntityState.Modified;
-						db.SaveChanges();
+						db.Database.ExecuteSqlCommand("exec sp_UpdateRecord @id, @firstName, @lastName, @email, @dateOfBirth",
+							idParam, firstNameParam, lastNameParam, emailParam, dateOfBirthParam);
 					}
 					return RedirectToAction("Index");
 				}
 				return View(model);
-
 			}
 			catch (Exception ex)
 			{
@@ -123,12 +137,10 @@ namespace CRUD_MVC_.Controllers
 		{
 			using (mydbEntities db = new mydbEntities())
 			{
-				var oRecord = db.Records.Find(id);
-				db.Records.Remove(oRecord);
-				db.SaveChanges();
+				var idParam = new SqlParameter("@id", id);
+				db.Database.ExecuteSqlCommand("exec sp_DeleteRecord @id", idParam);
 			}
 			return RedirectToAction("Index");
 		}
 	}
-
 }
