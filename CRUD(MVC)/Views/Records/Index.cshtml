@@ -5,9 +5,25 @@
 
 <h2>@ViewBag.Tittle</h2>
 
+<div class="row">
+    <div>
+        <form id="searchForm" style="text-align:left" class="form-inline" method="get" action="@Url.Action("Index")">
+            <div class="form-group">
+                <input type="text" class="form-control" name="search" placeholder="Buscar por nombre">
+            </div>
+            <div class="form-group" style="padding-left: 5px">
+                <button class="btn btn-primary" type="submit" name="submitBtn">Buscar</button>
+                <a href="~/Records" class="btn btn-primary">Limpiar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <div class="row" style="text-align:right;padding:5px">
     <a href="~/Records/New" class="btn btn-primary">Nuevo</a>
 </div>
+
 <div class="row">
     <div class="col-md-12">
         <table class="table">
@@ -18,7 +34,7 @@
                 <th>Email</th>
                 <th></th>
             </tr>
-            @foreach(var oElement in Model)
+            @foreach (var oElement in Model)
             {
                 <tr>
                     <td>@oElement.Id</td>
